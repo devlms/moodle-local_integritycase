@@ -61,17 +61,26 @@ if ($canmanage) {
         $stages[$stage] = case_manager::stage_name($stage);
     }
     $forms['move'] = new move_form($url, ['stages' => $stages]);
-    $forms['note'] = new text_form($url, ['action' => 'note', 'header' => get_string('privatenote', 'local_integritycase'), 'label' => get_string('privatenote', 'local_integritycase'),
+    $forms['note'] = new text_form($url, [
+        'action' => 'note',
+        'header' => get_string('privatenote', 'local_integritycase'),
+        'label' => get_string('privatenote', 'local_integritycase'),
         'button' => get_string('addnote', 'local_integritycase')]);
     $draft = file_get_submitted_draft_itemid('evidence');
     file_prepare_draft_area($draft, $context->id, 'local_integritycase', 'evidence', $id, ['subdirs' => 0, 'maxfiles' => 20]);
     $forms['evidence'] = new evidence_form($url);
     $forms['evidence']->set_data(['id' => $id, 'evidence' => $draft]);
 } else if ($isstudent && $case->stage === workflow::AWAITING) {
-    $forms['respond'] = new text_form($url, ['action' => 'respond', 'header' => get_string('yourside', 'local_integritycase'), 'label' => get_string('response', 'local_integritycase'),
+    $forms['respond'] = new text_form($url, [
+        'action' => 'respond',
+        'header' => get_string('yourside', 'local_integritycase'),
+        'label' => get_string('response', 'local_integritycase'),
         'button' => get_string('respond', 'local_integritycase')]);
 } else if ($isstudent && $case->stage === workflow::DECIDED) {
-    $forms['appeal'] = new text_form($url, ['action' => 'appeal', 'header' => get_string('appealheader', 'local_integritycase'), 'label' => get_string('appealreason', 'local_integritycase'),
+    $forms['appeal'] = new text_form($url, [
+        'action' => 'appeal',
+        'header' => get_string('appealheader', 'local_integritycase'),
+        'label' => get_string('appealreason', 'local_integritycase'),
         'button' => get_string('appeal', 'local_integritycase')]);
 }
 

@@ -12,6 +12,8 @@ Track academic misconduct cases inside Moodle: from the first report, through a 
 
 Turnitin, Originality.ai, Copyleaks and the other detectors put a flag next to a submission. Every one of them says a flag is not a finding. What happens next usually lives in email threads and spreadsheets. This plugin is that next step, inside the course, with Moodle's permissions, notifications, logs and privacy tools.
 
+![What the student sees: the request for their side, their response and the decision. The investigation and staff notes stay hidden.](docs/screenshots/student-case.png)
+
 ## What it does
 
 | Part | Status |
@@ -27,6 +29,8 @@ Turnitin, Originality.ai, Copyleaks and the other detectors put a flag next to a
 | Privacy API: export and delete for students, handlers and note authors, evidence files included | Done |
 | Report builder source "Academic integrity cases" for site-wide reports, only for people with `local/integritycase:viewall` | Done |
 | Link from the assignment grading page, configurable stages | Planned |
+
+![The handler's view: the full history, with staff-only entries marked](docs/screenshots/teacher-case.png)
 
 ## Install
 

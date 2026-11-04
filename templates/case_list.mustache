@@ -42,7 +42,7 @@
     <tbody>
         {{#rows}}
         <tr>
-            {{#isstaff}}<td><a href="{{url}}">{{student}}</a>{{#hidden}} <span class="badge bg-secondary text-white">{{#str}}studentcannotsee, local_integritycase{{/str}}</span>{{/hidden}}</td>{{/isstaff}}
+            {{#isstaff}}<td><a href="{{url}}">{{student}}</a>{{#hidden}} <span class="badge bg-secondary text-dark">{{#str}}hiddenbadge, local_integritycase{{/str}}</span>{{/hidden}}</td>{{/isstaff}}
             <td>{{activity}}</td>
             <td>{{^isstaff}}<a href="{{url}}">{{/isstaff}}{{stage}}{{^isstaff}}</a>{{/isstaff}}</td>
             <td>{{outcome}}</td>
