@@ -27,6 +27,8 @@ use local_integritycase\event\case_updated;
  * @copyright  2026 DevLMS <contact@devlms.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \local_integritycase\local\case_manager
+ * @covers     \local_integritycase\event\case_created
+ * @covers     \local_integritycase\event\case_updated
  */
 final class case_manager_test extends \advanced_testcase {
     /** @var \stdClass */
@@ -71,6 +73,10 @@ final class case_manager_test extends \advanced_testcase {
         $logged = array_values(array_filter($sink->get_events(), fn($e) => $e instanceof case_created));
         $this->assertCount(1, $logged);
         $this->assertEquals($this->student->id, $logged[0]->relateduserid);
+        $this->assertStringContainsString("integrity case '{$case->id}'", $logged[0]->get_description());
+        $this->assertStringContainsString('/local/integritycase/view.php?id=', $logged[0]->get_url()->out(false));
+        $this->assertNotEmpty(case_created::get_name());
+        $this->assertSame('local_integritycase', case_created::get_objectid_mapping()['db']);
     }
 
     public function test_open_needs_manage(): void {
@@ -178,6 +184,10 @@ final class case_manager_test extends \advanced_testcase {
         $logged = array_values(array_filter($sink->get_events(), fn($e) => $e instanceof case_updated));
         $this->assertCount(1, $logged);
         $this->assertSame('investigating', $logged[0]->other['stage']);
+        $this->assertStringContainsString('updated integrity case', $logged[0]->get_description());
+        $this->assertStringContainsString('/local/integritycase/view.php?id=', $logged[0]->get_url()->out(false));
+        $this->assertNotEmpty(case_updated::get_name());
+        $this->assertSame('local_integritycase', case_updated::get_objectid_mapping()['db']);
     }
 
     public function test_private_notes_never_reach_the_student(): void {
