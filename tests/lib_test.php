@@ -34,6 +34,14 @@ use local_integritycase\local\case_manager;
  * @covers     \local_integritycase\form\evidence_form
  */
 final class lib_test extends \advanced_testcase {
+    /** @var \phpunit_message_sink Keeps enrolment welcome emails from setting up the page theme. */
+    private \phpunit_message_sink $messages;
+
+    protected function setUp(): void {
+        parent::setUp();
+        $this->messages = $this->redirectMessages();
+    }
+
     public static function setUpBeforeClass(): void {
         global $CFG;
         parent::setUpBeforeClass();
@@ -81,17 +89,31 @@ final class lib_test extends \advanced_testcase {
         local_integritycase_pluginfile($course, null, $context, 'evidence', [1, 'a'], true);
     }
 
-    public function test_pluginfile_missing_file_or_wrong_course(): void {
-        $this->resetAfterTest();
+    /**
+     * A teacher, a student and a case in a new course.
+     *
+     * @return array [course, case, teacher]
+     */
+    private function teacher_with_case(): array {
         $course = $this->getDataGenerator()->create_course();
-        $other = $this->getDataGenerator()->create_course();
         $teacher = $this->getDataGenerator()->create_and_enrol($course, 'editingteacher');
-        $this->getDataGenerator()->enrol_user($teacher->id, $other->id, 'editingteacher');
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
         $this->setUser($teacher);
-        $case = case_manager::open((int) $course->id, (int) $student->id, 'x');
+        return [$course, case_manager::open((int) $course->id, (int) $student->id, 'x'), $teacher];
+    }
+
+    public function test_pluginfile_missing_file(): void {
+        $this->resetAfterTest();
+        [$course, $case] = $this->teacher_with_case();
         $context = \context_course::instance($course->id);
         $this->assertFalse(local_integritycase_pluginfile($course, null, $context, 'evidence', [$case->id, 'none.pdf'], true));
+    }
+
+    public function test_pluginfile_case_from_another_course(): void {
+        $this->resetAfterTest();
+        [, $case, $teacher] = $this->teacher_with_case();
+        $other = $this->getDataGenerator()->create_course();
+        $this->getDataGenerator()->enrol_user($teacher->id, $other->id, 'editingteacher');
         $this->assertFalse(local_integritycase_pluginfile(
             $other,
             null,
