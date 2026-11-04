@@ -1,0 +1,58 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_integritycase/case_list
+
+    Cases in a course.
+
+    Example context (json):
+    {
+        "hasrows": true,
+        "isstaff": true,
+        "rows": [{"url": "#", "student": "Sam Student", "activity": "Essay 1", "stage": "investigating",
+                  "outcome": "", "handler": "Tess Teacher", "updated": "4/11/26, 10:00", "hidden": true}]
+    }
+}}
+{{#hasrows}}
+<table class="table table-striped generaltable local-integritycase-list">
+    <thead>
+        <tr>
+            {{#isstaff}}<th scope="col">{{#str}}student, local_integritycase{{/str}}</th>{{/isstaff}}
+            <th scope="col">{{#str}}activity, local_integritycase{{/str}}</th>
+            <th scope="col">{{#str}}stage, local_integritycase{{/str}}</th>
+            <th scope="col">{{#str}}outcome, local_integritycase{{/str}}</th>
+            {{#isstaff}}<th scope="col">{{#str}}handler, local_integritycase{{/str}}</th>{{/isstaff}}
+            <th scope="col">{{#str}}lastmodified{{/str}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#rows}}
+        <tr>
+            {{#isstaff}}<td><a href="{{url}}">{{student}}</a>{{#hidden}} <span class="badge bg-secondary text-white">{{#str}}studentcannotsee, local_integritycase{{/str}}</span>{{/hidden}}</td>{{/isstaff}}
+            <td>{{activity}}</td>
+            <td>{{^isstaff}}<a href="{{url}}">{{/isstaff}}{{stage}}{{^isstaff}}</a>{{/isstaff}}</td>
+            <td>{{outcome}}</td>
+            {{#isstaff}}<td>{{handler}}</td>{{/isstaff}}
+            <td>{{updated}}</td>
+        </tr>
+        {{/rows}}
+    </tbody>
+</table>
+{{/hasrows}}
+{{^hasrows}}
+<p>{{#str}}nocases, local_integritycase{{/str}}</p>
+{{/hasrows}}
