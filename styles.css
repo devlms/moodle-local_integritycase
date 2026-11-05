@@ -204,6 +204,6 @@
     padding: .35em .65em;
 }
 
-.local-integritycase-table td {
+.local-integritycase-list .table.local-integritycase-table td {
     vertical-align: middle;
 }
