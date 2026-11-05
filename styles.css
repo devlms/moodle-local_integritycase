@@ -207,3 +207,13 @@
 .local-integritycase-list .table.local-integritycase-table td {
     vertical-align: middle;
 }
+
+/* Moodle 4.5 ships Bootstrap 4, which has no gap utilities. */
+.local-integritycase-list .gap-2,
+.local-integritycase-case .gap-2 {
+    gap: .5rem;
+}
+
+.local-integritycase-case .gap-3 {
+    gap: 1rem;
+}
