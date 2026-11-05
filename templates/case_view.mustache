@@ -76,7 +76,7 @@
                 <li class="is-{{state}}"{{#iscurrent}} aria-current="step"{{/iscurrent}}>
                     <span class="local-integritycase-step-dot" aria-hidden="true">{{#isdone}}&#10003;{{/isdone}}{{^isdone}}{{number}}{{/isdone}}</span>
                     <span class="local-integritycase-step-name">{{name}}</span>
-                    <span class="visually-hidden sr-only">({{statelabel}})</span>
+                    <span class="local-integritycase-sr">({{statelabel}})</span>
                 </li>
                 {{/steps}}
             </ol>
