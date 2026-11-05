@@ -17,42 +17,85 @@
 {{!
     @template local_integritycase/case_list
 
-    Cases in a course.
+    Cases in a course. Staff get filters, names and handlers; students see only their own cases.
 
     Example context (json):
     {
-        "hasrows": true,
         "isstaff": true,
-        "rows": [{"url": "#", "student": "Sam Student", "activity": "Essay 1", "stage": "investigating",
-                  "outcome": "", "handler": "Tess Teacher", "updated": "4/11/26, 10:00", "hidden": true}]
+        "canmanage": true,
+        "newcaseurl": "#",
+        "filters": [{"name": "Open", "count": 2, "url": "#", "active": true},
+                    {"name": "Closed", "count": 1, "url": "#", "active": false}],
+        "hasrows": true,
+        "rows": [{"id": 1, "url": "#", "student": "Sam Student", "picture": "", "activity": "Essay 1",
+                  "stage": "Investigating", "stagebadge": "badge bg-warning text-dark", "outcome": "",
+                  "handler": "Tess Teacher", "updated": "2 days ago", "updatedfull": "Tuesday, 3 November 2026",
+                  "hidden": true}],
+        "emptymessage": "No cases yet.",
+        "emptyhint": ""
     }
 }}
-{{#hasrows}}
-<table class="table table-striped generaltable local-integritycase-list">
-    <thead>
-        <tr>
-            {{#isstaff}}<th scope="col">{{#str}}student, local_integritycase{{/str}}</th>{{/isstaff}}
-            <th scope="col">{{#str}}activity, local_integritycase{{/str}}</th>
-            <th scope="col">{{#str}}stage, local_integritycase{{/str}}</th>
-            <th scope="col">{{#str}}outcome, local_integritycase{{/str}}</th>
-            {{#isstaff}}<th scope="col">{{#str}}handler, local_integritycase{{/str}}</th>{{/isstaff}}
-            <th scope="col">{{#str}}lastmodified{{/str}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#rows}}
-        <tr>
-            {{#isstaff}}<td><a href="{{url}}">{{student}}</a>{{#hidden}} <span class="badge bg-secondary text-dark">{{#str}}hiddenbadge, local_integritycase{{/str}}</span>{{/hidden}}</td>{{/isstaff}}
-            <td>{{activity}}</td>
-            <td>{{^isstaff}}<a href="{{url}}">{{/isstaff}}{{stage}}{{^isstaff}}</a>{{/isstaff}}</td>
-            <td>{{outcome}}</td>
-            {{#isstaff}}<td>{{handler}}</td>{{/isstaff}}
-            <td>{{updated}}</td>
-        </tr>
-        {{/rows}}
-    </tbody>
-</table>
-{{/hasrows}}
-{{^hasrows}}
-<p>{{#str}}nocases, local_integritycase{{/str}}</p>
-{{/hasrows}}
+<div class="local-integritycase-list">
+    {{#isstaff}}
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <ul class="nav nav-pills" aria-label="{{#str}}filter, local_integritycase{{/str}}">
+            {{#filters}}
+            <li class="nav-item">
+                <a class="nav-link{{#active}} active{{/active}}" href="{{url}}"{{#active}} aria-current="page"{{/active}}>
+                    {{name}} <span class="badge rounded-pill {{#active}}bg-light text-dark{{/active}}{{^active}}bg-secondary text-dark{{/active}} ms-1">{{count}}</span>
+                </a>
+            </li>
+            {{/filters}}
+        </ul>
+        {{#canmanage}}
+        <a class="btn btn-primary ms-auto" href="{{newcaseurl}}">{{#pix}} t/add, core {{/pix}}{{#str}}newcase, local_integritycase{{/str}}</a>
+        {{/canmanage}}
+    </div>
+    {{/isstaff}}
+    {{#hasrows}}
+    <div class="table-responsive">
+        <table class="table generaltable table-hover local-integritycase-table mb-0">
+            <thead>
+                <tr>
+                    {{#isstaff}}<th scope="col">{{#str}}student, local_integritycase{{/str}}</th>{{/isstaff}}
+                    <th scope="col">{{#str}}activity, local_integritycase{{/str}}</th>
+                    <th scope="col">{{#str}}stage, local_integritycase{{/str}}</th>
+                    <th scope="col">{{#str}}outcome, local_integritycase{{/str}}</th>
+                    {{#isstaff}}<th scope="col">{{#str}}handler, local_integritycase{{/str}}</th>{{/isstaff}}
+                    <th scope="col">{{#str}}updated, local_integritycase{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#rows}}
+                <tr>
+                    {{#isstaff}}
+                    <td>
+                        <div class="d-flex align-items-center">
+                            {{{picture}}}
+                            <div class="ms-2">
+                                <a href="{{url}}" class="fw-bold">{{student}}</a>
+                                {{#hidden}}<div class="small text-muted">{{#pix}} i/show, core {{/pix}}{{#str}}hiddenbadge, local_integritycase{{/str}}</div>{{/hidden}}
+                            </div>
+                        </div>
+                    </td>
+                    {{/isstaff}}
+                    <td>{{activity}}{{^activity}}<span class="text-muted">&ndash;</span>{{/activity}}</td>
+                    <td>
+                        {{^isstaff}}<a href="{{url}}" class="text-decoration-none">{{/isstaff}}<span class="{{stagebadge}}">{{stage}}</span>{{^isstaff}}</a>{{/isstaff}}
+                    </td>
+                    <td>{{outcome}}</td>
+                    {{#isstaff}}<td>{{handler}}</td>{{/isstaff}}
+                    <td class="text-nowrap"><span title="{{updatedfull}}">{{updated}}</span></td>
+                </tr>
+                {{/rows}}
+            </tbody>
+        </table>
+    </div>
+    {{/hasrows}}
+    {{^hasrows}}
+    <div class="local-integritycase-empty text-center border rounded py-5 px-3">
+        <p class="h5 mb-2">{{emptymessage}}</p>
+        {{#emptyhint}}<p class="text-muted mb-0 mx-auto">{{emptyhint}}</p>{{/emptyhint}}
+    </div>
+    {{/hasrows}}
+</div>

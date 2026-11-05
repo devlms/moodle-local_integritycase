@@ -29,7 +29,7 @@ require_once($CFG->libdir . '/formslib.php');
  */
 class text_form extends \moodleform {
     /**
-     * Define the fields. Custom data: action (note, respond or appeal), header, label, button.
+     * Define the fields. Custom data: action (note, respond or appeal), label, button.
      */
     protected function definition() {
         $mform = $this->_form;
@@ -38,7 +38,6 @@ class text_form extends \moodleform {
         $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden', 'action', $data['action']);
         $mform->setType('action', PARAM_ALPHA);
-        $mform->addElement('header', $data['action'] . 'hdr', $data['header']);
         $mform->addElement('textarea', 'text', $data['label'], ['rows' => 5, 'cols' => 60]);
         $mform->setType('text', PARAM_TEXT);
         $mform->addRule('text', null, 'required', null, 'client');

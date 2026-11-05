@@ -39,7 +39,6 @@ class move_form extends \moodleform {
         $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden', 'action', 'move');
         $mform->setType('action', PARAM_ALPHA);
-        $mform->addElement('header', 'movehdr', get_string('nextstep', 'local_integritycase'));
         $mform->addElement('select', 'stage', get_string('stage', 'local_integritycase'), $this->_customdata['stages']);
         $outcomes = ['' => get_string('choosedots')];
         foreach (workflow::outcomes() as $outcome) {

@@ -55,33 +55,31 @@ $PAGE->navbar->add($title);
 
 // The forms this viewer may use, at this stage.
 $forms = [];
+$narrow = ['class' => 'full-width-labels'];
 if ($canmanage) {
     $stages = [];
     foreach (workflow::next_stages($case->stage) as $stage) {
-        $stages[$stage] = case_manager::stage_name($stage);
+        $stages[$stage] = \local_integritycase\local\display::stage_label($stage);
     }
-    $forms['move'] = new move_form($url, ['stages' => $stages]);
+    $forms['move'] = new move_form($url, ['stages' => $stages], 'post', '', $narrow);
     $forms['note'] = new text_form($url, [
         'action' => 'note',
-        'header' => get_string('privatenote', 'local_integritycase'),
         'label' => get_string('privatenote', 'local_integritycase'),
-        'button' => get_string('addnote', 'local_integritycase')]);
+        'button' => get_string('addnote', 'local_integritycase')], 'post', '', $narrow);
     $draft = file_get_submitted_draft_itemid('evidence');
     file_prepare_draft_area($draft, $context->id, 'local_integritycase', 'evidence', $id, ['subdirs' => 0, 'maxfiles' => 20]);
-    $forms['evidence'] = new evidence_form($url);
+    $forms['evidence'] = new evidence_form($url, null, 'post', '', $narrow);
     $forms['evidence']->set_data(['id' => $id, 'evidence' => $draft]);
 } else if ($isstudent && $case->stage === workflow::AWAITING) {
     $forms['respond'] = new text_form($url, [
         'action' => 'respond',
-        'header' => get_string('yourside', 'local_integritycase'),
         'label' => get_string('response', 'local_integritycase'),
-        'button' => get_string('respond', 'local_integritycase')]);
+        'button' => get_string('respond', 'local_integritycase')], 'post', '', $narrow);
 } else if ($isstudent && $case->stage === workflow::DECIDED) {
     $forms['appeal'] = new text_form($url, [
         'action' => 'appeal',
-        'header' => get_string('appealheader', 'local_integritycase'),
         'label' => get_string('appealreason', 'local_integritycase'),
-        'button' => get_string('appeal', 'local_integritycase')]);
+        'button' => get_string('appeal', 'local_integritycase')], 'post', '', $narrow);
 }
 
 $action = optional_param('action', '', PARAM_ALPHA);
@@ -106,66 +104,25 @@ if ($action && isset($forms[$action]) && ($data = $forms[$action]->get_data())) 
     redirect($url);
 }
 
-$history = [];
-foreach (case_manager::events($case, !$isstaff) as $event) {
-    $line = get_string('action:' . $event->action, 'local_integritycase');
-    if ($event->action === 'stage' || $event->action === 'appeal') {
-        $line .= ': ' . case_manager::stage_name($event->tostage);
-        if ($event->tostage === workflow::DECIDED && $event->outcome) {
-            $line .= ' (' . get_string('outcome:' . $event->outcome, 'local_integritycase') . ')';
-        }
-    }
-    $history[] = [
-        'what' => $line,
-        'who' => $event->userid ? fullname(core_user::get_user($event->userid)) : '',
-        'when' => userdate($event->timecreated, get_string('strftimedatetimeshort', 'langconfig')),
-        'note' => $event->note ? format_text($event->note, FORMAT_PLAIN, ['context' => $context]) : '',
-        'private' => $isstaff && !$event->visibletostudent,
-    ];
-}
-$files = [];
-if ($isstaff) {
-    foreach (get_file_storage()->get_area_files($context->id, 'local_integritycase', 'evidence', $id, 'filename', false) as $file) {
-        $files[] = [
-            'name' => $file->get_filename(),
-            'url' => moodle_url::make_pluginfile_url(
-                $context->id,
-                'local_integritycase',
-                'evidence',
-                $id,
-                '/',
-                $file->get_filename(),
-                true
-            )->out(false),
-        ];
-    }
-}
-$cmname = '';
-if ($case->cmid && ($cm = get_fast_modinfo($course)->cms[$case->cmid] ?? null)) {
-    $cmname = $cm->get_formatted_name();
-}
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading($title);
-echo $OUTPUT->render_from_template('local_integritycase/case_view', [
-    'summary' => format_text($case->summary, FORMAT_PLAIN, ['context' => $context]),
-    'stage' => case_manager::stage_name($case->stage),
-    'outcome' => $case->outcome ? get_string('outcome:' . $case->outcome, 'local_integritycase') : '',
-    'activity' => $cmname,
-    'handler' => $case->handlerid ? fullname(core_user::get_user($case->handlerid)) : '',
-    'hiddenfromstudent' => $isstaff && !$case->studentvisible,
-    'history' => $history,
-    'files' => $files,
-    'hasfiles' => (bool) $files,
-    'isstaff' => $isstaff,
-]);
+$titles = [
+    'move' => 'nextstep',
+    'note' => 'privatenote',
+    'evidence' => 'evidence',
+    'respond' => 'yourside',
+    'appeal' => 'appealheader',
+];
+$rendered = [];
 foreach ($forms as $name => $form) {
-    if ($name !== 'evidence') {
-        $form->set_data(['id' => $id]);
-    }
     if ($name === 'move' && !workflow::next_stages($case->stage)) {
         continue;
     }
-    $form->display();
+    if ($name !== 'evidence') {
+        $form->set_data(['id' => $id]);
+    }
+    $rendered[] = ['title' => get_string($titles[$name], 'local_integritycase'), 'html' => $form->render()];
 }
+$page = new \local_integritycase\output\case_view($case, $isstaff, $rendered, time());
+
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('local_integritycase/case_view', $page->export_for_template($OUTPUT));
 echo $OUTPUT->footer();

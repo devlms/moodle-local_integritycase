@@ -17,54 +17,120 @@
 {{!
     @template local_integritycase/case_view
 
-    One case with its history.
+    One case: header, progress through the stages, what was found, history and the viewer's actions.
 
     Example context (json):
     {
-        "summary": "<p>Two paragraphs match a 2019 essay.</p>",
-        "stage": "awaiting student response",
+        "heading": "Case about Sam Student",
+        "student": "Sam Student",
+        "picture": "",
+        "stage": "Awaiting student response",
+        "stagebadge": "badge bg-info text-white",
         "outcome": "",
         "activity": "Essay 1",
+        "activityurl": "#",
+        "activityicon": "",
         "handler": "Tess Teacher",
+        "opened": "2 November 2026",
+        "updated": "Yesterday",
         "hiddenfromstudent": false,
+        "summary": "<p>Two paragraphs match a 2019 essay.</p>",
+        "steps": [{"key": "reported", "name": "Reported", "state": "done", "statelabel": "done", "isdone": true, "iscurrent": false, "number": 1},
+                  {"key": "investigating", "name": "Investigating", "state": "current", "statelabel": "current stage", "isdone": false, "iscurrent": true,
+                   "number": 2}],
+        "hashistory": true,
+        "history": [{"what": "Case opened", "who": "Tess Teacher", "picture": "", "when": "2/11/26, 10:00",
+                     "ago": "3 days ago", "note": "", "private": true, "bystudent": false}],
         "isstaff": true,
         "hasfiles": true,
-        "files": [{"name": "report.pdf", "url": "#"}],
-        "history": [{"what": "Case opened", "who": "Tess Teacher", "when": "4/11/26, 10:00", "note": "", "private": true}]
+        "files": [{"name": "report.pdf", "size": "120 KB", "icon": "", "url": "#"}],
+        "hasforms": true,
+        "forms": [{"title": "Next step", "html": "<form></form>"}]
     }
 }}
 <div class="local-integritycase-case">
     {{#hiddenfromstudent}}
-    <div class="alert alert-info">{{#str}}studentcannotsee, local_integritycase{{/str}}</div>
+    <div class="alert alert-info d-flex align-items-center">{{#pix}} i/show, core {{/pix}}<span>{{#str}}studentcannotsee, local_integritycase{{/str}}</span></div>
     {{/hiddenfromstudent}}
-    <dl class="row">
-        <dt class="col-sm-3">{{#str}}stage, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9" data-region="stage">{{stage}}</dd>
-        {{#outcome}}
-        <dt class="col-sm-3">{{#str}}outcome, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9" data-region="outcome">{{outcome}}</dd>
-        {{/outcome}}
-        {{#activity}}
-        <dt class="col-sm-3">{{#str}}activity, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9">{{activity}}</dd>
-        {{/activity}}
-        <dt class="col-sm-3">{{#str}}handler, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9">{{handler}}</dd>
-        <dt class="col-sm-3">{{#str}}summary, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9">{{{summary}}}</dd>
-        {{#hasfiles}}
-        <dt class="col-sm-3">{{#str}}evidence, local_integritycase{{/str}}</dt>
-        <dd class="col-sm-9"><ul class="list-unstyled mb-0">{{#files}}<li><a href="{{url}}">{{name}}</a></li>{{/files}}</ul></dd>
-        {{/hasfiles}}
-    </dl>
-    <h3 class="h5">{{#str}}history, local_integritycase{{/str}}</h3>
-    <ol class="list-unstyled border-start ps-3" data-region="history">
-        {{#history}}
-        <li class="mb-3">
-            <div><strong>{{what}}</strong>{{#private}} <span class="badge bg-secondary text-dark">{{#str}}staffonly, local_integritycase{{/str}}</span>{{/private}}</div>
-            <div class="text-muted small">{{who}} &middot; {{when}}</div>
-            {{#note}}<div class="mt-1">{{{note}}}</div>{{/note}}
-        </li>
-        {{/history}}
-    </ol>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center gap-3">
+                {{{picture}}}
+                <div class="flex-grow-1">
+                    <h2 class="h3 mb-1">{{heading}}</h2>
+                    <div class="text-muted small local-integritycase-meta">
+                        {{#activity}}<span>{{{activityicon}}}{{#activityurl}}<a href="{{activityurl}}">{{activity}}</a>{{/activityurl}}{{^activityurl}}{{activity}}{{/activityurl}}</span>{{/activity}}
+                        {{#handler}}<span>{{#str}}handler, local_integritycase{{/str}}: {{handler}}</span>{{/handler}}
+                        <span>{{#str}}opened, local_integritycase, {{opened}}{{/str}}</span>
+                        <span>{{#str}}updated, local_integritycase{{/str}}: {{updated}}</span>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="{{stagebadge}} local-integritycase-stage" data-region="stage">{{stage}}</span>
+                    {{#outcome}}<div class="small mt-2">{{#str}}outcome, local_integritycase{{/str}}: <strong data-region="outcome">{{outcome}}</strong></div>{{/outcome}}
+                </div>
+            </div>
+            <ol class="local-integritycase-steps mt-4 mb-0" aria-label="{{#str}}progress, local_integritycase{{/str}}">
+                {{#steps}}
+                <li class="is-{{state}}"{{#iscurrent}} aria-current="step"{{/iscurrent}}>
+                    <span class="local-integritycase-step-dot" aria-hidden="true">{{#isdone}}&#10003;{{/isdone}}{{^isdone}}{{number}}{{/isdone}}</span>
+                    <span class="local-integritycase-step-name">{{name}}</span>
+                    <span class="visually-hidden sr-only">({{statelabel}})</span>
+                </li>
+                {{/steps}}
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="{{#hasforms}}col-lg-8{{/hasforms}}{{^hasforms}}col-12{{/hasforms}}">
+            {{#summary}}
+            <section class="mb-4">
+                <h3 class="h5">{{#str}}summary, local_integritycase{{/str}}</h3>
+                <div class="local-integritycase-summary">{{{summary}}}</div>
+                {{#hasfiles}}
+                <ul class="list-unstyled d-flex flex-wrap gap-2 mt-3 mb-0" aria-label="{{#str}}evidence, local_integritycase{{/str}}">
+                    {{#files}}
+                    <li><a class="local-integritycase-file" href="{{url}}">{{{icon}}}<span>{{name}}</span> <span class="text-muted small">{{size}}</span></a></li>
+                    {{/files}}
+                </ul>
+                {{/hasfiles}}
+            </section>
+            {{/summary}}
+            <section class="mb-4">
+                <h3 class="h5">{{#str}}history, local_integritycase{{/str}}</h3>
+                {{#hashistory}}
+                <ol class="local-integritycase-timeline" data-region="history">
+                    {{#history}}
+                    <li class="{{#private}}is-private{{/private}}{{#bystudent}} is-student{{/bystudent}}">
+                        <span class="local-integritycase-avatar">{{{picture}}}</span>
+                        <div class="local-integritycase-entry">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <strong>{{what}}</strong>
+                                {{#private}}<span class="badge local-integritycase-private">{{#pix}} t/locked, core {{/pix}}{{#str}}staffonly, local_integritycase{{/str}}</span>{{/private}}
+                                <span class="text-muted small ms-auto"><span>{{who}}</span> &middot; <span title="{{when}}">{{ago}}</span></span>
+                            </div>
+                            {{#note}}<div class="mt-2 local-integritycase-note">{{{note}}}</div>{{/note}}
+                        </div>
+                    </li>
+                    {{/history}}
+                </ol>
+                {{/hashistory}}
+                {{^hashistory}}<p class="text-muted">{{#str}}nohistory, local_integritycase{{/str}}</p>{{/hashistory}}
+            </section>
+        </div>
+        {{#hasforms}}
+        <div class="col-lg-4">
+            {{#forms}}
+            <section class="card mb-3 local-integritycase-action">
+                <div class="card-body">
+                    <h3 class="h6 card-title">{{title}}</h3>
+                    {{{html}}}
+                </div>
+            </section>
+            {{/forms}}
+        </div>
+        {{/hasforms}}
+    </div>
 </div>

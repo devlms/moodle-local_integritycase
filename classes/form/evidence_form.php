@@ -37,7 +37,6 @@ class evidence_form extends \moodleform {
         $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden', 'action', 'evidence');
         $mform->setType('action', PARAM_ALPHA);
-        $mform->addElement('header', 'evidencehdr', get_string('evidence', 'local_integritycase'));
         $mform->addElement(
             'filemanager',
             'evidence',

@@ -1,0 +1,209 @@
+.local-integritycase-meta > span:not(:last-child)::after {
+    content: "\00b7";
+    margin: 0 .5rem;
+}
+
+.local-integritycase-case .badge.local-integritycase-stage {
+    font-size: .875rem;
+    padding: .4em .75em;
+}
+
+.local-integritycase-empty p.text-muted {
+    max-width: 36rem;
+}
+
+/* Progress through the stages. */
+.local-integritycase-steps {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.local-integritycase-steps li {
+    flex: 1 1 0;
+    position: relative;
+    padding-top: 2.25rem;
+    text-align: center;
+    font-size: .8125rem;
+    color: #6a737b;
+}
+
+.local-integritycase-steps li::before {
+    content: "";
+    position: absolute;
+    top: .75rem;
+    left: -50%;
+    right: 50%;
+    height: 2px;
+    background: #dee2e6;
+}
+
+.local-integritycase-steps li:first-child::before {
+    display: none;
+}
+
+.local-integritycase-step-dot {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.625rem;
+    height: 1.625rem;
+    margin-left: -.8125rem;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    background: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.local-integritycase-steps li.is-done::before,
+.local-integritycase-steps li.is-current::before {
+    background: var(--bs-primary, var(--primary, #0f6cbf));
+}
+
+.local-integritycase-steps li.is-done .local-integritycase-step-dot {
+    border-color: var(--bs-primary, var(--primary, #0f6cbf));
+    background: var(--bs-primary, var(--primary, #0f6cbf));
+    color: #fff;
+}
+
+.local-integritycase-steps li.is-current {
+    color: #1d2125;
+    font-weight: 700;
+}
+
+.local-integritycase-steps li.is-current .local-integritycase-step-dot {
+    border-color: var(--bs-primary, var(--primary, #0f6cbf));
+    color: var(--bs-primary, var(--primary, #0f6cbf));
+    box-shadow: 0 0 0 4px rgba(15, 108, 191, .18);
+}
+
+.local-integritycase-steps li.is-skipped .local-integritycase-step-dot {
+    border-style: dashed;
+    color: #8f959e;
+}
+
+.local-integritycase-steps li.is-skipped .local-integritycase-step-name {
+    text-decoration: line-through;
+}
+
+@media (max-width: 575.98px) {
+    .local-integritycase-steps li:not(.is-current) .local-integritycase-step-name {
+        display: none;
+    }
+}
+
+/* What was found and the evidence files. */
+.local-integritycase-summary {
+    padding: .75rem 1rem;
+    border-left: 4px solid var(--bs-primary, var(--primary, #0f6cbf));
+    background: #f5f7fa;
+    border-radius: 0 .375rem .375rem 0;
+}
+
+.local-integritycase-summary p:last-child {
+    margin-bottom: 0;
+}
+
+.local-integritycase-file {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    padding: .375rem .75rem;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+    text-decoration: none;
+}
+
+/* History. */
+.local-integritycase-timeline {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.local-integritycase-timeline::before {
+    content: "";
+    position: absolute;
+    top: .5rem;
+    bottom: .5rem;
+    left: 17px;
+    width: 2px;
+    background: #dee2e6;
+}
+
+.local-integritycase-timeline > li {
+    position: relative;
+    display: flex;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.local-integritycase-avatar {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 36px;
+}
+
+.local-integritycase-avatar .userpicture {
+    margin: 0;
+    border: 2px solid #fff;
+    box-sizing: content-box;
+}
+
+.local-integritycase-entry {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: .75rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    background: #fff;
+}
+
+.local-integritycase-timeline > li.is-student .local-integritycase-entry {
+    border-color: #9ec5e8;
+    background: #f1f7fd;
+}
+
+.local-integritycase-timeline > li.is-private .local-integritycase-entry {
+    border: 1px dashed #c99a2e;
+    background: #fffaf0;
+}
+
+.local-integritycase-note p:last-child {
+    margin-bottom: 0;
+}
+
+.local-integritycase-private {
+    border: 1px solid #c99a2e;
+    background: #fff3d6;
+    color: #5c4300;
+}
+
+.local-integritycase-private .icon {
+    margin-right: .25rem;
+    font-size: .75em;
+}
+
+.local-integritycase-action .mform .form-group:last-child,
+.local-integritycase-action .mform .fitem:last-child {
+    margin-bottom: 0;
+}
+
+.local-integritycase-action .fdescription.required {
+    display: none;
+}
+
+.local-integritycase-table .badge {
+    font-size: .8125rem;
+    padding: .35em .65em;
+}
+
+.local-integritycase-table td {
+    vertical-align: middle;
+}

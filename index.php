@@ -43,34 +43,16 @@ $PAGE->set_title($title);
 $PAGE->set_heading(format_string($course->fullname, true, ['context' => $context]));
 
 $cases = $isstaff ? case_manager::for_course($courseid) : case_manager::for_student($courseid, (int) $USER->id);
-$modinfo = get_fast_modinfo($course);
-$rows = [];
-foreach ($cases as $case) {
-    $rows[] = [
-        'url' => (new moodle_url('/local/integritycase/view.php', ['id' => $case->id]))->out(false),
-        'student' => fullname(core_user::get_user($case->studentid)),
-        'activity' => $case->cmid && isset($modinfo->cms[$case->cmid]) ? $modinfo->cms[$case->cmid]->get_formatted_name() : '',
-        'stage' => case_manager::stage_name($case->stage),
-        'outcome' => $case->outcome ? get_string('outcome:' . $case->outcome, 'local_integritycase') : '',
-        'handler' => $case->handlerid ? fullname(core_user::get_user($case->handlerid)) : '',
-        'updated' => userdate($case->timemodified, get_string('strftimedatetimeshort', 'langconfig')),
-        'hidden' => !$case->studentvisible,
-    ];
-}
+$page = new \local_integritycase\output\case_list(
+    $course,
+    $cases,
+    $isstaff,
+    has_capability('local/integritycase:manage', $context),
+    optional_param('show', 'open', PARAM_ALPHA),
+    time()
+);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
-if (has_capability('local/integritycase:manage', $context)) {
-    echo $OUTPUT->single_button(
-        new moodle_url('/local/integritycase/open.php', ['courseid' => $courseid]),
-        get_string('newcase', 'local_integritycase'),
-        'get',
-        ['type' => single_button::BUTTON_PRIMARY]
-    );
-}
-echo $OUTPUT->render_from_template('local_integritycase/case_list', [
-    'rows' => $rows,
-    'hasrows' => (bool) $rows,
-    'isstaff' => $isstaff,
-]);
+echo $OUTPUT->render_from_template('local_integritycase/case_list', $page->export_for_template($OUTPUT));
 echo $OUTPUT->footer();
