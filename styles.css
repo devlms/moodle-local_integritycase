@@ -179,7 +179,7 @@
     margin-bottom: 0;
 }
 
-.local-integritycase-private {
+.local-integritycase-case .badge.local-integritycase-private {
     border: 1px solid #c99a2e;
     background: #fff3d6;
     color: #5c4300;
