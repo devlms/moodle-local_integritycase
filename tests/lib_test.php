@@ -19,6 +19,12 @@ namespace local_integritycase;
 use local_integritycase\form\{evidence_form, move_form, open_form, text_form};
 use local_integritycase\local\case_manager;
 
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+// Coverage resolves CoversFunction before any test runs, so the functions must be loaded here.
+require_once($CFG->dirroot . '/local/integritycase/lib.php');
+
 #[\PHPUnit\Framework\Attributes\CoversFunction('local_integritycase_extend_navigation_course')]
 #[\PHPUnit\Framework\Attributes\CoversFunction('local_integritycase_pluginfile')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\form\open_form::class)]
