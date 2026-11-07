@@ -19,6 +19,12 @@ namespace local_integritycase;
 use local_integritycase\form\{evidence_form, move_form, open_form, text_form};
 use local_integritycase\local\case_manager;
 
+#[\PHPUnit\Framework\Attributes\CoversFunction('local_integritycase_extend_navigation_course')]
+#[\PHPUnit\Framework\Attributes\CoversFunction('local_integritycase_pluginfile')]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\form\open_form::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\form\move_form::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\form\text_form::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\form\evidence_form::class)]
 /**
  * Tests for navigation, evidence file access and the forms.
  *

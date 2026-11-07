@@ -23,6 +23,7 @@ use core_privacy\local\request\writer;
 use core_privacy\tests\provider_testcase;
 use local_integritycase\local\case_manager;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\privacy\provider::class)]
 /**
  * Tests for the privacy provider.
  *

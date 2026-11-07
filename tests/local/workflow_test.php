@@ -16,6 +16,7 @@
 
 namespace local_integritycase\local;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\local\workflow::class)]
 /**
  * Tests for the stage rules.
  *

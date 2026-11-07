@@ -19,6 +19,9 @@ namespace local_integritycase\local;
 use local_integritycase\event\case_created;
 use local_integritycase\event\case_updated;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\local\case_manager::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\event\case_created::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\event\case_updated::class)]
 /**
  * Tests for opening and moving cases.
  *

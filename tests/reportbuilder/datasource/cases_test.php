@@ -20,6 +20,8 @@ use core_reportbuilder\local\filters\select;
 use core_reportbuilder\tests\core_reportbuilder_testcase;
 use local_integritycase\local\case_manager;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\reportbuilder\datasource\cases::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\reportbuilder\local\entities\integritycase::class)]
 /**
  * Tests for the cases report source.
  *

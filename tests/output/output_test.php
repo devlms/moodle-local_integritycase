@@ -18,6 +18,8 @@ namespace local_integritycase\output;
 
 use local_integritycase\local\case_manager;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\output\case_list::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\output\case_view::class)]
 /**
  * Tests for the data behind the case list and case pages.
  *

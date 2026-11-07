@@ -16,6 +16,7 @@
 
 namespace local_integritycase\local;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_integritycase\local\display::class)]
 /**
  * Tests for how stages and times are shown.
  *
