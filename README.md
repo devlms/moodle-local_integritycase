@@ -7,6 +7,7 @@
 [![PHP](https://img.shields.io/badge/PHP-8.1%20to%208.4-777bb4)](https://www.php.net/supported-versions.php)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue)](LICENSE)
 [![Maturity](https://img.shields.io/badge/maturity-stable-green)](version.php)
+[![Sponsor](https://img.shields.io/badge/sponsor-this%20plugin-2438ff)](https://devlms.com/sponsors/?plugin=local_integritycase)
 
 Track academic misconduct cases inside Moodle: from the first report, through a private investigation and the student's response, to a decision and an appeal. Every step is recorded.
 
@@ -68,6 +69,12 @@ PHPUnit covers the workflow rules, every action and its permission checks, the p
 ## Who made it
 
 [DevLMS](https://devlms.com) builds custom Moodle plugins. Need something like this changed for your institution, or a different plugin? [Get a quote](https://devlms.com/#quote).
+
+## Sponsors
+
+<!-- sponsors:start -->
+No sponsors yet. [Sponsor this plugin](https://devlms.com/sponsors/?plugin=local_integritycase): your name or logo, with a link to your site, goes here and on [devlms.com/sponsors](https://devlms.com/sponsors/).
+<!-- sponsors:end -->
 
 ## License
 
