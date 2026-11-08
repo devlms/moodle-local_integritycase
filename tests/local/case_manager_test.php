@@ -222,6 +222,31 @@ final class case_manager_test extends \advanced_testcase {
         ));
     }
 
+    public function test_when_the_handler_is_gone_the_course_case_managers_hear(): void {
+        global $DB;
+        $other = $this->getDataGenerator()->create_and_enrol($this->course, 'editingteacher');
+        $case = $this->open();
+        case_manager::move((int) $case->id, 'investigating');
+        case_manager::move((int) $case->id, 'awaitingresponse', 'Tell us about section 2.');
+        $DB->set_field('user', 'suspended', 1, ['id' => $this->teacher->id]);
+        $this->setUser($this->student);
+        $sink = $this->redirectMessages();
+        case_manager::respond((int) $case->id, 'My side.');
+        $to = array_map('intval', array_column($sink->get_messages(), 'useridto'));
+        $this->assertContains((int) $other->id, $to);
+        $this->assertNotContains((int) $this->teacher->id, $to);
+    }
+
+    public function test_deleting_the_course_removes_cases_and_history(): void {
+        global $DB;
+        $case = $this->open();
+        case_manager::move((int) $case->id, 'investigating');
+        $this->setAdminUser();
+        delete_course($this->course->id, false);
+        $this->assertFalse($DB->record_exists('local_integritycase', ['id' => $case->id]));
+        $this->assertFalse($DB->record_exists('local_integritycase_event', ['caseid' => $case->id]));
+    }
+
     public function test_student_can_only_respond_when_asked(): void {
         $case = $this->open();
         $this->setUser($this->student);

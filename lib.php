@@ -87,3 +87,23 @@ function local_integritycase_pluginfile($course, $cm, $context, $filearea, $args
     }
     send_stored_file($file, 0, 0, true, $options);
 }
+
+/**
+ * Remove the cases, history and evidence of a course that is being deleted. After deletion its context
+ * is gone, so the privacy API could no longer find them.
+ *
+ * @param stdClass $course
+ */
+function local_integritycase_pre_course_delete($course) {
+    global $DB;
+    $context = context_course::instance($course->id, IGNORE_MISSING);
+    if ($context) {
+        get_file_storage()->delete_area_files($context->id, 'local_integritycase', 'evidence');
+    }
+    $ids = $DB->get_fieldset_select('local_integritycase', 'id', 'courseid = ?', [$course->id]);
+    if ($ids) {
+        [$in, $params] = $DB->get_in_or_equal($ids);
+        $DB->delete_records_select('local_integritycase_event', "caseid $in", $params);
+    }
+    $DB->delete_records('local_integritycase', ['courseid' => $course->id]);
+}

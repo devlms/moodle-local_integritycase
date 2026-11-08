@@ -53,7 +53,7 @@ $handlers = [$USER->id => fullname($USER)] + $handlers;
 $activities = [];
 foreach (get_fast_modinfo($course)->get_cms() as $cm) {
     if ($cm->uservisible && in_array($cm->modname, ['assign', 'quiz', 'workshop', 'forum', 'lesson'], true)) {
-        $activities[$cm->id] = $cm->get_formatted_name();
+        $activities[$cm->id] = $cm->get_formatted_name(['escape' => false]);
     }
 }
 

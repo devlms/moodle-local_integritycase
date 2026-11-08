@@ -161,7 +161,7 @@ class case_view implements \renderable, \templatable {
         $activityurl = '';
         $activityicon = '';
         if ($case->cmid && ($cm = get_fast_modinfo($case->courseid)->cms[$case->cmid] ?? null)) {
-            $activity = $cm->get_formatted_name();
+            $activity = $cm->get_formatted_name(['escape' => false]);
             $activityurl = $cm->url ? $cm->url->out(false) : '';
             $activityicon = $output->pix_icon('monologo', '', $cm->modname, ['class' => 'icon me-1']);
         }

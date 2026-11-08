@@ -102,7 +102,7 @@ class case_list implements \renderable, \templatable {
             $row = [
                 'id' => (int) $case->id,
                 'url' => (new moodle_url('/local/integritycase/view.php', ['id' => $case->id]))->out(false),
-                'activity' => $cm ? $cm->get_formatted_name() : '',
+                'activity' => $cm ? $cm->get_formatted_name(['escape' => false]) : '',
                 'stage' => display::stage_label($case->stage),
                 'stagebadge' => display::stage_badge($case->stage),
                 'outcome' => $case->outcome ? get_string('outcome:' . $case->outcome, 'local_integritycase') : '',

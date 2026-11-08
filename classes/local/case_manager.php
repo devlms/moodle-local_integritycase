@@ -406,13 +406,26 @@ final class case_manager {
             'student' => $student,
             'course' => format_string($course->fullname, true, ['context' => context_course::instance($course->id)]),
         ];
-        self::send(
-            $case,
-            'casehandler',
-            (int) $case->handlerid,
-            get_string('message:subject:handler', 'local_integritycase', $student),
-            get_string("message:handler:$what", 'local_integritycase', $a)
-        );
+        // The handler, or every case manager in the course when the handler is gone or no longer manages cases.
+        $context = context_course::instance($course->id);
+        $handler = (int) $case->handlerid;
+        $user = $handler ? core_user::get_user($handler, 'id, deleted, suspended') : false;
+        $handlerok = $user && !$user->deleted && !$user->suspended
+            && has_capability('local/integritycase:manage', $context, $handler);
+        $recipients = [$handler];
+        if (!$handlerok) {
+            $managers = get_users_by_capability($context, 'local/integritycase:manage', 'u.id, u.suspended');
+            $recipients = array_map('intval', array_keys(array_filter($managers, fn($u) => empty($u->suspended))));
+        }
+        foreach ($recipients as $userid) {
+            self::send(
+                $case,
+                'casehandler',
+                $userid,
+                get_string('message:subject:handler', 'local_integritycase', $student),
+                get_string("message:handler:$what", 'local_integritycase', $a)
+            );
+        }
     }
 
     /**

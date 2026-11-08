@@ -6,7 +6,7 @@
 [![Moodle](https://img.shields.io/badge/Moodle-4.5%20to%205.3-f98012)](https://moodledev.io/general/releases)
 [![PHP](https://img.shields.io/badge/PHP-8.1%20to%208.4-777bb4)](https://www.php.net/supported-versions.php)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue)](LICENSE)
-[![Maturity](https://img.shields.io/badge/maturity-alpha-orange)](version.php)
+[![Maturity](https://img.shields.io/badge/maturity-stable-green)](version.php)
 
 Track academic misconduct cases inside Moodle: from the first report, through a private investigation and the student's response, to a decision and an appeal. Every step is recorded.
 
